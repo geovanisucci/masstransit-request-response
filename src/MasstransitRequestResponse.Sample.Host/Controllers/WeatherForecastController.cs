@@ -25,21 +25,15 @@ namespace MasstransitRequestResponse.Sample.Host.Controllers
             _client = client;
         }
 
+
         [HttpGet]
-        public async Task<IEnumerable<WeatherForecastResult>> Get()
+        public async Task<IEnumerable<WeatherForecast>> Get()
         {
 
-            var response = await _client.GetResponse<IEnumerable<WeatherForecastResult>>(new WeatherForecastRequest() { Range = Enumerable.Range(1, 5) });
+            var response = await _client.GetResponse<WeatherForecastResult>(new WeatherForecastRequest() { Range = Enumerable.Range(1, 5) });
 
-            return response.Message.ToArray();
-            // var rng = new Random();
-            // return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            // {
-            //     Date = DateTime.Now.AddDays(index),
-            //     TemperatureC = rng.Next(-20, 55),
-            //     Summary = Summaries[rng.Next(Summaries.Length)]
-            // })
-            // .ToArray();
+            return response.Message.WeatherForecast.ToArray();
+
         }
     }
 }

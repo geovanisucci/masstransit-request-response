@@ -18,14 +18,14 @@ namespace MasstransitRequestResponse.Sample.Domain.Consumer
             var t = Task.Run(async () =>
             {
                 var rng = new Random();
-                var rs = context.Message.Range.Select(index => new WeatherForecastResult
+                var rs = context.Message.Range.Select(index => new WeatherForecast
                 {
                     Date = DateTime.Now.AddDays(index),
                     TemperatureC = rng.Next(-20, 55),
                     Summary = Summaries[rng.Next(Summaries.Length)]
                 });
 
-                await context.RespondAsync<IEnumerable<WeatherForecastResult>>(rs);
+                await context.RespondAsync<WeatherForecastResult>(new WeatherForecastResult() { WeatherForecast = rs });
 
             });
 

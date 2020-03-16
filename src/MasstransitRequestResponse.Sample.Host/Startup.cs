@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MassTransit;
+using MassTransit.AspNetCoreIntegration;
+using MassTransit.ExtensionsDependencyInjectionIntegration;
 using MasstransitRequestResponse.Sample.Domain.Consumer;
 using MasstransitRequestResponse.Sample.Domain.MessageContracts;
 using Microsoft.AspNetCore.Builder;
@@ -30,10 +32,10 @@ namespace MasstransitRequestResponse.Sample.Host
         {
             services.AddControllers();
 
+
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<WeatherForecastConsumer>();
-
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
                 {
                     cfg.Host("rabbitmq://localhost", x =>
@@ -45,11 +47,14 @@ namespace MasstransitRequestResponse.Sample.Host
                     cfg.ConfigureEndpoints(provider);
                 }));
 
+
                 x.AddRequestClient<WeatherForecastRequest>();
 
+                services.AddSingleton<IHostedService, Service>();
             });
-        }
 
+
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -68,6 +73,8 @@ namespace MasstransitRequestResponse.Sample.Host
             {
                 endpoints.MapControllers();
             });
+
+
         }
     }
 }
